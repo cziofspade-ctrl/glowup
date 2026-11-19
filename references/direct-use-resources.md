@@ -292,3 +292,242 @@ SillyTavern notes:
 ```
 
 只收真正能提高实现效率或视觉可能性的资源。不要把纯灵感网站和“可直接调用资源”混为一类。
+
+
+---
+
+# H. Variable Font · 可变字体
+
+## Google Fonts Variable Fonts
+https://fonts.google.com/
+
+用途：直接在网页里调用开源可变字体。
+特点：
+- Google Fonts 全部字体采用开源许可证，可用于商业与非商业项目。
+- CSS API v2 支持 variable font axis range。
+- 可直接通过 `<link>` / CSS API 引入，不需要会员。
+
+示例：
+```html
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@200..900&display=swap">
+```
+
+然后可用：
+```css
+.title {
+  font-family: "Crimson Pro", serif;
+  font-weight: 420;
+}
+```
+
+如果字体有自定义轴，可进一步用 `font-variation-settings`。
+
+适合：
+- 时间戳 hover 时字体“长胖 / 变窄 / 变斜”
+- 标题随状态改变字重和宽度
+- 不换字体文件也能做连续 morph 感
+- 动态排版、响应式状态栏
+
+注意：
+- 只请求实际需要的轴与范围，避免加载过大的字体数据。
+- 中文可变字体数量和轴范围通常比拉丁字体少，使用前检查字符覆盖。
+
+## Refract Variable Font Playground
+https://refracttools.com/variable-font-playground/
+
+用途：拖入本地 TTF / OTF / WOFF / WOFF2，自动识别全部 axes，拖滑杆并直接复制 CSS。
+特点：
+- 浏览器本地处理
+- 无账号
+- 可直接 Copy CSS
+- 自带 Animate 预览
+
+适合：
+- 已有字体但不知道 `wght` / `wdth` / 自定义轴怎么写
+- 给 AI 确认实际 axis tag 与范围
+- 先调出喜欢的状态，再把值写入主题
+
+## openWorkstand Variable Font Tester
+https://www.openworkstand.com/variable-font-tester
+
+用途：上传 variable font，自动生成 sliders 和 CSS。
+特点：
+- 免费
+- 无登录
+- 浏览器本地处理
+- 支持 WOFF2 / WOFF / TTF / OTF
+- 标准轴优先转成 `font-weight`、`font-stretch` 等；自定义轴输出 `font-variation-settings`
+
+## Axis-Praxis
+https://www.axis-praxis.org/
+
+用途：专门探索 variable font 的视觉可能性。
+特点：
+- 免费浏览器 playground
+- 可拖本地 variable TTF
+- 可实时 animate axes
+- CSS 按钮可生成复现设置
+
+Glowup 规则：
+Variable Font 不只用于“选字体”，也可以被当作动画材料。优先把 axis 变化与信息状态绑定，而不是无意义循环。
+
+---
+
+# I. SVG Filter Generator · 可直接生成滤镜代码
+
+## SVG Filter Effects Generator · IO Tools
+https://iotools.cloud/tool/svg-filter-effects-generator/
+
+用途：可视化构建 SVG `<filter>` 并复制成品代码。
+可直接生成 / 调节：
+- `feGaussianBlur`
+- `feColorMatrix`
+- hue rotate
+- saturate
+- luminance-to-alpha
+- `feTurbulence`
+- `feDisplacementMap`
+- `feDropShadow`
+- `feConvolveMatrix` emboss / engrave / sharpen / edge detect
+
+特点：
+- 在线实时预览
+- 可直接复制 SVG filter definition 和 CSS `filter: url(#id)`
+- 图片预览在本地浏览器处理
+- 无需自己手写复杂 filter pipeline
+
+适合：
+- Gooey / distortion
+- 手绘抖动
+- 水波 / 热浪
+- 玻璃折射原型
+- emboss / engraving
+- 噪声遮罩
+
+注意：
+生成器只解决“怎么写出滤镜”，不替代性能判断。尤其 `feTurbulence + feDisplacementMap` 不要大面积常驻。
+
+## SVG Playground
+https://webdevpuneet.com/svg-playground/
+
+用途：直接编辑、预览、下载 SVG。
+特点：
+- 免费浏览器工具
+- 可复制 / 下载 SVG
+- 支持 filter、mask、clipPath、gradient、pattern、CSS animation、SMIL、textPath、stroke drawing 等
+- 适合把生成器代码贴进去继续改
+
+Glowup 规则：
+AI 如果对 SVG filter 结构不确定，应先用生成器得到最小正确版本，再按目标视觉做精简，不要凭空堆 fe* primitives。
+
+---
+
+# J. Noise / Grain · 噪点、纸张、胶片纹理
+
+## Refract Grain & Noise Generator
+https://refracttools.com/noise-texture-generator/
+
+用途：直接生成超小型 SVG noise + CSS。
+特点：
+- 免费
+- 无注册
+- Copy code
+- 可调 grain size、detail、strength、blend mode、tile size
+- 生成的 SVG filter 可以直接嵌入 CSS data URI
+
+典型用途：
+- 纸张
+- 胶片
+- 印刷感
+- 磨砂背景
+- 渐变防 banding
+
+## Wensity Noise Texture Generator
+https://ui.wensity.com/tools/noise-texture-generator
+
+用途：生成 fine grain、soft grain、clouds、paper。
+特点：
+- 全部导出免费
+- 无账号
+- 无水印
+- 可导出 PNG / JPG / WebP / SVG / CSS
+- 可生成透明 overlay
+- 支持 seamless tile
+- Paper 模式可调 roughness、fibres、folds、wrinkles 等
+
+特别适合：
+- 更像“纸”的材质，而不是单纯灰色噪声
+- 需要透明 grain 覆盖已有背景
+
+## SVG Noise & Grain Generator · ALI Tools
+https://alitools.online/svg-noise-texture/
+
+用途：直接调 `feTurbulence` 参数并 Copy SVG。
+特点：
+- 100% free
+- no sign-up
+- no watermark
+- 可调 baseFrequency / octaves / opacity / seed / stitch
+
+适合：
+AI 需要一个最小、干净、可读的 `feTurbulence` 示例时优先使用。
+
+## NoiseGradient
+https://noisegradient.com/
+
+用途：渐变 + grain 一体生成。
+特点：
+- 无账号
+- 可导出 PNG / SVG
+- 可 Copy CSS
+- 支持 organic / linear / radial / conic gradient
+- grain 有 noise / film / scanlines
+- royalty-free 导出
+
+适合：
+- 一步生成“有质感的渐变”，避免普通光滑渐变显得塑料
+
+## MeshSVG Seamless Texture Generator
+https://www.meshsvg.com/textures/
+
+用途：无缝 SVG turbulence texture。
+特点：
+- 免费商用
+- 无登录
+- 无水印
+- Copy CSS / 下载 tile
+- 输出 data URI，可零额外图片请求
+
+适合：
+- 纸张、grain、surface texture
+- 需要重复平铺且看不出接缝的背景
+
+## Super Designer Noise / Texture
+https://superdesigner.co/
+
+用途：一站式生成 SVG noise / texture。
+特点：
+- 完全免费
+- 无账号
+- 可即时导出 SVG / CSS / PNG
+- 同站还提供 clip-path、section divider、animated gradient、CSS background 等工具
+
+Glowup 规则：
+噪声纹理优先“静态小 tile / data URI / background layer”，不要默认让 `feTurbulence` 每帧动画。静态纹理往往能得到 80% 的质感，只付出很小的性能成本。
+
+---
+
+# 三类资源调用优先级
+
+用户要动态字体 / 时间戳文字变化：
+Google Fonts Variable Fonts → Refract Variable Font Playground → Axis-Praxis
+
+用户要做 SVG 特殊滤镜：
+IO Tools SVG Filter Generator → SVG Playground → 手工精简
+
+用户要纸张 / 胶片 / grain：
+Refract（最小 CSS） → Wensity（复杂纸张） → MeshSVG（无缝 tile）
+
+用户要渐变 + grain 一次完成：
+NoiseGradient
