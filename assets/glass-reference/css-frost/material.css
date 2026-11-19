@@ -1,0 +1,55 @@
+/* 原生 CSS 磨砂：不含 SVG、图片、字体或 JS 依赖。 */
+.csg-frost {
+  --csg-frost-fill: rgba(225,241,231,.16);
+  --csg-frost-wash: linear-gradient(135deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.03) 100%);
+  --csg-frost-shadow: inset 0 1px 0 rgba(255,255,255,.48),inset 0 -1px 0 rgba(43,69,60,.045),0 6px 18px -16px rgba(34,64,47,.16);
+  --csg-frost-effect: blur(8px) saturate(105%);
+}
+:where([data-glass-theme="night"]) .csg-frost, .csg-frost:where([data-glass-theme="night"]) {
+  --csg-frost-fill: rgba(9, 20, 22, 0.20);
+  --csg-frost-wash: none;
+  --csg-frost-shadow: none;
+  --csg-frost-edge: rgba(180,207,199,.20);
+  --csg-frost-text: #e3e9e4;
+}
+
+.csg-frost {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  border-radius: var(--csg-frost-radius, 20px);
+  padding: var(--csg-frost-padding, 1rem);
+  background: transparent;
+  color: var(--csg-frost-text, #233436);
+}
+.csg-frost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  box-sizing: border-box;
+  border-radius: inherit;
+  background-color: var(--csg-frost-fill);
+  background-image: var(--csg-frost-wash);
+  box-shadow: var(--csg-frost-shadow);
+  border: 1px solid var(--csg-frost-edge, rgba(67,95,84,.17));
+  -webkit-backdrop-filter: var(--csg-frost-effect);
+  backdrop-filter: var(--csg-frost-effect);
+}
+.csg-frost--menu { --csg-frost-effect: blur(12px) saturate(105%); }
+.csg-frost--scene {
+  --csg-frost-effect: blur(clamp(10px,2vmin,22px)) saturate(102%) contrast(.46) brightness(1.55);
+  --csg-frost-fill: rgba(255,255,255,.18);
+  --csg-frost-shadow: none;
+  --csg-frost-edge: transparent;
+}
+:where([data-glass-theme="night"]) .csg-frost--scene, .csg-frost--scene:where([data-glass-theme="night"]) {
+  --csg-frost-effect: blur(16px) saturate(105%);
+  --csg-frost-fill: rgba(0,0,0,.10);
+}
+@media (max-width:700px) {
+  :where([data-glass-theme="night"]) .csg-frost--scene, .csg-frost--scene:where([data-glass-theme="night"]) {
+    --csg-frost-effect: blur(14px) saturate(105%);
+  }
+}
