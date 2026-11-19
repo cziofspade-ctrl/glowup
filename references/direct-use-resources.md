@@ -531,3 +531,250 @@ Refract（最小 CSS） → Wensity（复杂纸张） → MeshSVG（无缝 tile�
 
 用户要渐变 + grain 一次完成：
 NoiseGradient
+
+
+---
+
+# 资源的 AI 可调用性标记
+
+以后收录新资源时，除 Free status / License 外，增加：
+
+```text
+AI accessibility:
+- Direct code        = AI 可直接复制 / 生成代码，不需要打开网页操作
+- CSS/CDN            = AI 可直接写入 CSS / HTML 外链
+- NPM                = AI 可直接安装依赖
+- HTTP readable      = Agent 可通过网络读取文档 / 源码
+- Browser optional   = 有浏览器时可操作可视化界面，但不是必需
+- Browser required   = 核心功能必须点网页 / 拖滑块 / 上传文件
+- Human tuning nice  = AI 能做，但人亲自拖参数更容易找到审美偏好
+```
+
+优先选择 Direct code / CSS-CDN / NPM / HTTP readable 的资源。
+可视化生成器只作为辅助工具，不应让用户必须先去网页手工做完再交给 AI。
+
+
+---
+
+# K. Web Font / Font CDN · 可直接 CSS 调用的字体资源
+
+## ZeoSeven Fonts / ZSFT
+https://fonts.zeoseven.com/
+文档：https://fonts.zeoseven.com/docs/fontsapi/use/
+
+用途：中文 / 日文 / 韩文 / 拉丁等免费可商用字体的浏览、预览与 FontsAPI。
+当前特点：
+- 收录 1300+ 字体
+- 支持简体中文、繁体中文、日文、韩文、拉丁、俄文等筛选
+- 字体详情页会直接提供“嵌入到 Web 项目”的 FontsAPI
+- 支持 CSS、HTML、Next.js、WordPress、Halo
+- Vite / Webpack / WebView / Electron 等标准 Web 环境可直接使用
+- 提供 Variable 轴实时预览
+
+直接调用示例：
+```css
+@import url("https://fontsapi.zeoseven.com/136/main/result.css");
+
+.example {
+  font-family: "Judou Sans Hans";
+  font-weight: normal;
+}
+```
+
+AI accessibility：
+- CSS/CDN
+- HTTP readable
+- Browser optional
+- Human tuning nice
+
+Glowup 规则：
+1. AI 不得凭字体名称猜 API URL。
+2. 需要具体字体时，应打开该字体详情页，读取其真实 FontsAPI URL 与 `font-family`。
+3. 用户面向中国大陆使用时，优先把 ZSFT 作为 Google Fonts 之前的候选。
+4. 如果项目追求长期稳定或离线使用，可进一步自托管，而不是永久依赖第三方 CDN。
+5. 具体字体仍需检查字体详情页的许可证。
+
+## 中文网字计划 / Chinese Webfont Project
+https://chinese-font.netlify.app/zh-cn/cdn/
+GitHub：https://github.com/KonghaYao/chinese-free-web-font-storage
+
+用途：专门解决中文 Web Font 体积过大的问题。
+特点：
+- 免费开源
+- 中文字体被分段切割
+- 浏览器按实际字符通过 `unicode-range` 请求对应小字库
+- 页面提供“复制 CSS”
+- 有 Vite / Next / Nuxt / Webpack 相关工具链
+- 适合中文正文、聊天 UI、状态栏的 Web 字体加载
+
+当前 CDN 文档会公布最新地址；不要把旧 CDN 域名硬编码到 Glowup。
+
+AI accessibility：
+- CSS/CDN
+- NPM
+- HTTP readable
+- Direct code
+
+适合：
+- 中文字体
+- 长聊天正文
+- 需要减少字体首屏体积
+- 需要中国大陆用户访问时优先测试
+
+## Fontsource
+https://fontsource.org/
+CDN 文档：https://fontsource.org/docs/getting-started/cdn
+
+用途：开源字体的 NPM / CDN / 自托管。
+特点：
+- 与 jsDelivr 集成
+- 可直接引用静态字体 CSS
+- 支持 Variable Fonts
+- 可以固定版本，避免远端字体静默变化
+- 支持 subset
+
+静态字体示例：
+```html
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/fontsource/css/open-sans@5.2.7/index.css">
+```
+
+Variable font 示例：
+```html
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/fontsource/css/roboto-flex:vf@5.0.8/index.min.css">
+```
+
+AI accessibility：
+- CSS/CDN
+- NPM
+- HTTP readable
+- Direct code
+
+大陆说明：
+jsDelivr 在中国大陆通常比 Google Fonts 更容易访问，但网络可达性会随运营商 / CDN 路由变化，不能当成绝对保证。关键主题仍应准备本地 fallback 或自托管方案。
+
+## Fontshare
+https://fontshare.com/
+
+用途：高质量免费拉丁字体，尤其适合标题、状态栏、小英文装饰文字。
+特点：
+- 免费
+- 无需账号即可使用 CDN / 下载
+- 有公开 CSS API
+- 很多字体提供 Variable styles
+- 常见字体包括 Satoshi、General Sans、Clash Display
+
+AI accessibility：
+- CSS/CDN
+- HTTP readable
+- Direct code
+
+适合：
+- 标题
+- 时间戳
+- 小型英文装饰
+- Variable Font 实验
+
+大陆说明：
+境外 CDN 可达性不作保证。面向大陆长期使用时，应准备 fallback / 自托管。
+
+## OnlyFonts
+https://onlyfonts.ai/
+文档：https://onlyfonts.ai/docs
+
+用途：开源字体搜索 + Google Fonts 兼容 CSS API。
+特点：
+- 2600+ 开源字体
+- 读取 API 不需要认证
+- CSS API / CDN
+- 提供机器可读索引与 agent-oriented 文档
+
+AI accessibility：
+- CSS/CDN
+- HTTP readable
+- Direct code
+- Agent friendly
+
+适合：
+AI 自动搜索字体、根据语义选择字体、直接生成嵌入代码。
+
+## OpenFont
+https://www.openfont.dev/
+
+用途：开源 Google Fonts 目录的 developer-first CDN / router。
+示例：
+```text
+https://openfont.dev/inter/400/css
+```
+
+特点：
+- CSS / WOFF2 / metadata 直接 endpoint
+- 可使用 Google Fonts 风格 CSS API
+- 适合 Agent / build tooling
+
+AI accessibility：
+- CSS/CDN
+- HTTP readable
+- Direct code
+
+## FontServer
+https://fontserver.ir/
+
+用途：免费公共 Web Font CDN，多语种脚本 / CJK 分片。
+特点：
+- CSS URL 可直接使用
+- JSON API
+- 可查看实际字节量
+- CJK 会进行切片，浏览器只请求需要的字符
+
+AI accessibility：
+- CSS/CDN
+- HTTP readable
+- Direct code
+
+## Google Fonts
+https://fonts.google.com/
+
+用途：最大规模之一的开源字体目录；Variable Fonts 丰富。
+AI accessibility：
+- CSS/CDN
+- HTTP readable
+- Direct code
+
+大陆说明：
+`fonts.googleapis.com` 与 `fonts.gstatic.com` 在中国大陆并不稳定，因此 Glowup 面向大陆用户时不得把 Google Fonts CDN 作为唯一字体来源。可改为 Fontsource / ZSFT / 自托管。
+
+---
+
+# 字体调用优先级
+
+面向中文 / 中国大陆：
+ZeoSeven Fonts → 中文网字计划 → Fontsource / 自托管
+
+需要高质量英文标题 / 状态栏：
+Fontshare → Fontsource → Google Fonts
+
+需要 Variable Font：
+Fontsource Variable → Google Fonts Variable → Fontshare Variable
+
+需要 AI 程序化检索：
+OnlyFonts → OpenFont → Fontsource
+
+需要长期稳定：
+优先固定版本 / 自托管，不依赖“latest” CDN。
+
+---
+
+# 字体类任务的 AI 工作流
+
+当用户说“给我找一个字体”“这里字体不好看”“做一个动态字体”时：
+
+1. 先判断语言覆盖：中文 / 日文 / 英文 / 多语种。
+2. 判断用途：正文 / 标题 / 时间戳 / 装饰 / 状态栏。
+3. 判断是否需要 Variable axes。
+4. 在直连字体库中搜索 2~5 个候选。
+5. 打开具体字体详情页，读取真实 CSS API URL、真实 `font-family`、可用 weight / axes 与许可证。
+6. 不得凭名称猜 API endpoint。
+7. 实现 fallback 字体栈。
+8. 中国大陆用户优先测试 ZSFT / 中文网字计划 / 自托管。
